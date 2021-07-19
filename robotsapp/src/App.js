@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import Search from "./Components/Search/Search";
+import Display from "./Components/Display/Display";
+import Scroll from "./Components/Scroll/Scroll";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      searchField: "",
+      usersList: [],
+    };
+  }
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users").then((response) => {
+      return response.json().then((users) => {
+        return this.setState({ usersList: users });
+      });
+    });
+    console.log(this.state);
+  }
+
+  searchChanged = (e) => {
+    this.setState({ searchField: e.target.value });
+    //  console.log(this.state.searchField);
+  };
+
+  render() {
+    const { usersList, searchField } = this.state;
+    const filterdList = usersList.filter((item) => {
+      return item.name.toLowerCase().includes(searchField.toLowerCase());
+    });
+    return (
+      <div className="App">
+        <Search searchField={searchField} searchChanged={this.searchChanged} />
+
+        <Display usersList={filterdList} />
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -1,0 +1,6 @@
+.Scroll {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-behavior: inherit;
+}
